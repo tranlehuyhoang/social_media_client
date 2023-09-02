@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import Footer from './inc/Footer'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { uploadImage } from '../actions/UploadActions.js';
 
 const HomePage = () => {
+    const dispatch = useDispatch()
+
     const { user } = useSelector((state) => state.authReducer.authData)
     const [image, setImage] = useState('');
     const [desc, setDesc] = useState('');
@@ -37,7 +40,12 @@ const HomePage = () => {
             data.append("file", image)
             newPost.image = fileName
             console.log(newPost)
+            dispatch(uploadImage(data))
         }
+    }
+    const handleChangImage = () => {
+        setImage('');
+        setImageUrl('');
     }
     return (
         <>
@@ -518,30 +526,33 @@ const HomePage = () => {
                         <div className="col-md-7">
                             {/* Post Create Box
           ================================================= */}
-                            <div className="create-post">
-                                <div className="row">
-                                    <div className="col-md-7 col-sm-7">
-                                        <div className="form-group">
-                                            <img
-                                                src="https://themified.com/friend-finder/images/users/user-1.jpg"
-                                                alt=""
-                                                className="profile-photo-md"
-                                            />
-                                            <textarea
-                                                name="texts"
-                                                id="exampleTextarea"
-                                                cols={30}
-                                                rows={1}
-                                                className="form-control"
-                                                placeholder="Write what you wish"
-                                                onChange={e => { setDesc(e.target.value) }}
-                                                defaultValue={""}
-                                            />
+                            <form action="" onSubmit={handleCreatePost}>
+                                <div className="create-post">
+                                    <div className="row">
+                                        <div className="col-md-7 col-sm-7">
+                                            <div className="form-group">
+                                                <img
+                                                    src="https://themified.com/friend-finder/images/users/user-1.jpg"
+                                                    alt=""
+                                                    className="profile-photo-md"
+                                                />
+                                                <textarea
+                                                    name="texts"
+                                                    id="exampleTextarea"
+                                                    cols={30}
+                                                    rows={1}
+                                                    required
+                                                    className="form-control"
+                                                    placeholder="Write what you wish"
+                                                    onChange={e => { setDesc(e.target.value) }}
+                                                    defaultValue={""}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-md-5 col-sm-5">
-                                        <div className="tools">
-                                            <form action="" onSubmit={handleCreatePost}>
+
+                                        <div className="col-md-5 col-sm-5">
+                                            <div className="tools">
+
                                                 <ul className="publishing-tools list-inline">
                                                     <li>
                                                         <label htmlFor='image'>
@@ -563,37 +574,39 @@ const HomePage = () => {
                                                 <button type='submit' className="btn btn-primary pull-right">
                                                     Publish
                                                 </button>
-                                            </form>
+
+
+                                            </div>
 
                                         </div>
+                                        <div className="post-content relative">
+                                            {
+                                                imageUrl ? (
+                                                    <>
+                                                        <button onClick={() => { handleChangImage() }} style={{ position: "absolute", right: "0", display: "flex" }}><svg style={{ color: 'white', right: "0", width: "" }} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
+                                                            <path d="M 25 2 C 12.309534 2 2 12.309534 2 25 C 2 37.690466 12.309534 48 25 48 C 37.690466 48 48 37.690466 48 25 C 48 12.309534 37.690466 2 25 2 z M 25 4 C 36.609534 4 46 13.390466 46 25 C 46 36.609534 36.609534 46 25 46 C 13.390466 46 4 36.609534 4 25 C 4 13.390466 13.390466 4 25 4 z M 32.990234 15.986328 A 1.0001 1.0001 0 0 0 32.292969 16.292969 L 25 23.585938 L 17.707031 16.292969 A 1.0001 1.0001 0 0 0 16.990234 15.990234 A 1.0001 1.0001 0 0 0 16.292969 17.707031 L 23.585938 25 L 16.292969 32.292969 A 1.0001 1.0001 0 1 0 17.707031 33.707031 L 25 26.414062 L 32.292969 33.707031 A 1.0001 1.0001 0 1 0 33.707031 32.292969 L 26.414062 25 L 33.707031 17.707031 A 1.0001 1.0001 0 0 0 32.990234 15.986328 z"></path>
+                                                        </svg></button>
 
-                                    </div>
-                                    <div className="post-content relative">
-                                        {
-                                            imageUrl ? (
-                                                <>
-                                                    <button onClick={() => { setImageUrl("") }} style={{ position: "absolute", right: "0", display: "flex" }}><svg style={{ color: 'white', right: "0", width: "" }} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
-                                                        <path d="M 25 2 C 12.309534 2 2 12.309534 2 25 C 2 37.690466 12.309534 48 25 48 C 37.690466 48 48 37.690466 48 25 C 48 12.309534 37.690466 2 25 2 z M 25 4 C 36.609534 4 46 13.390466 46 25 C 46 36.609534 36.609534 46 25 46 C 13.390466 46 4 36.609534 4 25 C 4 13.390466 13.390466 4 25 4 z M 32.990234 15.986328 A 1.0001 1.0001 0 0 0 32.292969 16.292969 L 25 23.585938 L 17.707031 16.292969 A 1.0001 1.0001 0 0 0 16.990234 15.990234 A 1.0001 1.0001 0 0 0 16.292969 17.707031 L 23.585938 25 L 16.292969 32.292969 A 1.0001 1.0001 0 1 0 17.707031 33.707031 L 25 26.414062 L 32.292969 33.707031 A 1.0001 1.0001 0 1 0 33.707031 32.292969 L 26.414062 25 L 33.707031 17.707031 A 1.0001 1.0001 0 0 0 32.990234 15.986328 z"></path>
-                                                    </svg></button>
+                                                        <img
+                                                            src={imageUrl}
+                                                            alt="post-image"
+                                                            className="img-responsive post-image"
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <>
 
-                                                    <img
-                                                        src={imageUrl}
-                                                        alt="post-image"
-                                                        className="img-responsive post-image"
-                                                    />
-                                                </>
-                                            ) : (
-                                                <>
+                                                    </>
+                                                )
+                                            }
+                                        </div>
 
-                                                </>
-                                            )
-                                        }
+
                                     </div>
                                 </div>
-                            </div>
-                            {/* Post Create Box End*/}
-                            {/* Post Content
-          ================================================= */}
+                            </form>
+
+
                             <div className="post-content">
                                 <img
                                     src="https://themified.com/friend-finder/images/post-images/1.jpg"
@@ -689,8 +702,7 @@ const HomePage = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* Post Content
-          ================================================= */}
+
                             <div className="post-content">
                                 <div className="video-wrapper">
                                     <video className="post-video" controls="">
